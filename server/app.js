@@ -3,17 +3,21 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const dotenv = require("dotenv");
+dotenv.config();
 const cors = require("cors");
 const mongoose = require('mongoose');
 mongoose
-.connect('')
+.connect(process.env.MONGODB_URI)
 .then(() => console.log("Database connected"))
 .catch((err) => console.log(err));
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var catsRouter = require('./routes/cats');
-var dogsRouter = require('./routes/dogs');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const classRouter = require('./routes/class');
+const studentRouter = require('./routes/student');
+const subjectRouter = require('./routes/subject');
+const teacherRouter = require('./routes/teacher');
 
 var app = express();
 
@@ -30,9 +34,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-//http://localhost:3000/cats/
-app.use('/cats', catsRouter);
-app.use('/dogs', dogsRouter);
+//http://localhost:3000/classes/
+app.use('/class', classRouter);
+app.use('/student', studentRouter);
+app.use('/subject', subjectRouter);
+app.use('/teacher', teacherRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
